@@ -1,5 +1,5 @@
 import "./App.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter, createHashRouter } from "react-router-dom";
 import Home from "./Components/Home/Home";
 import Products from "./Components/Products/Products";
 import Cart from "./Components/Cart/Cart";
@@ -8,6 +8,7 @@ import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
 import Categories from "./Components/Categories/Categories";
 import Layout from "./Components/Layout/Layout";
+
 
 let routes = createHashRouter([
   {
