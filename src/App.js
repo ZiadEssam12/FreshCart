@@ -1,5 +1,10 @@
 import "./App.css";
-import { RouterProvider, createBrowserRouter, createHashRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+  createHashRouter,
+} from "react-router-dom";
 import Home from "./Components/Home/Home";
 import Products from "./Components/Products/Products";
 import Cart from "./Components/Cart/Cart";
@@ -8,26 +13,35 @@ import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
 import Categories from "./Components/Categories/Categories";
 import Layout from "./Components/Layout/Layout";
-
-
-let routes = createHashRouter([
+import NotFound from "./Components/NotFound/NotFound";
+import DisplayCategory from "./Components/DisplayCategory/DisplayCategory";
+import DisplayProduct from "./Components/DisplayProduct/DisplayProduct";
+import UserContextProvider from "./Context/UserContaxt";
+let routes = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <Home /> },
+      { index: "/", element: <Navigate to={"/Home"} /> },
+      { path: "/Home", element: <Home /> },
       { path: "/Products", element: <Products /> },
       { path: "/Cart", element: <Cart /> },
       { path: "/Categories", element: <Categories /> },
       { path: "/Brands", element: <Brands /> },
       { path: "/Login", element: <Login /> },
       { path: "/Register", element: <Register /> },
+      { path: "/DisplayProduct/:id", element: <DisplayProduct /> },
+      { path: "*", element: <NotFound /> },
     ],
   },
 ]);
 
 function App() {
-  return <RouterProvider router={routes}></RouterProvider>;
+  return (
+    <UserContextProvider>
+      <RouterProvider router={routes}></RouterProvider>;
+    </UserContextProvider>
+  );
 }
 
 export default App;

@@ -53,3 +53,19 @@ a:hover {
 .w-65 {
   width: 65%;
 }
+
+.main-slider ul.slick-dots li button:before {
+  content: "";
+  width: 20px;
+  height: 10px;
+  border-radius: 50px;
+  background-color: black;
+}
+
+.main-slider img {
+  aspect-ratio: 20/1 !important;
+}
+
+.slick-slide div {
+  outline: none;
+}
