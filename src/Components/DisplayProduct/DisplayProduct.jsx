@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import img2 from "../../Assets/images/1680392991271-cover.jpeg";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-
+import { userContext } from "../../Context/UserContaxt";
+import toast from "react-hot-toast";
 export default function DisplayProduct() {
   let { id } = useParams();
   let [productInfo, setProduct] = useState({});
   let [loading, setLoading] = useState(false);
   let [quantity, setQuantity] = useState(1);
+  let { userToken } = useContext(userContext);
 
   useEffect(() => {
     {
@@ -22,22 +24,50 @@ export default function DisplayProduct() {
     setProduct(productInfo.data.data);
     setLoading(false);
   }
+  async function addToCart(id) {
+    toast.success("Product added successfully to your cart");
+
+    await axios.post(
+      `https://ecommerce.routemisr.com/api/v1/cart`,
+      { productId: id },
+      {
+        headers: {
+          token: userToken,
+        },
+      }
+    );
+  }
+
+  async function addToWishList(id) {
+    toast.success("Product added successfully to your wishlist");
+
+    await axios.post(
+      `https://ecommerce.routemisr.com/api/v1/wishlist`,
+      { productId: id },
+      {
+        headers: {
+          token: userToken,
+        },
+      }
+    );
+  }
+
   return (
     <>
       {loading ? (
-        <div class="d-flex justify-content-center align-items-center vh-100 py-5">
-          <div class="spinner-border text-main" role="status">
-            <span class="visually-hidden">
+        <div className="d-flex justify-content-center align-items-center vh-100 py-5">
+          <div className="spinner-border text-main" role="status">
+            <span className="visually-hidden">
               <i className="fas fa-spinner fa-spin position-absolute"></i>
             </span>
           </div>
         </div>
       ) : (
-        <div class="row justify-content-center align-items-center g-4 py-0 py-lg-5 my-0 mb-4 mb-md-0 my-lg-5">
+        <div className="row justify-content-center align-items-center g-4 py-0 py-lg-5 my-0 mb-4 mb-md-0 my-lg-5">
           <div className="col-12 col-md-3">
             <img src={productInfo?.imageCover} className="w-100" alt="" />
           </div>
-          <div className="col-12 col-md-8">
+          <div className="col-12 col-md-9">
             <h2>{productInfo?.title}</h2>
             <p className="px-2">{productInfo?.description}</p>
             <h3>
@@ -53,14 +83,28 @@ export default function DisplayProduct() {
                 {productInfo?.ratingsAverage}
               </p>
             </h4>
-            <button className="btn bg-main text-white w-100">
-              Add to card
-            </button>
-          </div>
-          <div className="col-12 col-md-1">
-            <button className="btn btn-outline-danger">-</button>
-            <span className="px-1">{1}</span>
-            <button className="btn btn-outline-success">+</button>
+            <div class="row justify-content-between align-items-center g-2 p-0">
+              <div class="col-10 p-0">
+                <button
+                  onClick={() => {
+                    addToCart(id);
+                  }}
+                  className="btn bg-main text-white w-100"
+                >
+                  Add to card
+                </button>
+              </div>
+              <div class="col-1 p-0">
+                <button
+                  onClick={() => {
+                    addToWishList(id);
+                  }}
+                  className="btn text-black w-100"
+                >
+                  <i class="fa-solid fa-heart fa-2x"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

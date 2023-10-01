@@ -33,9 +33,9 @@ export default function CategoriesSlider() {
   return (
     <>
       {loading ? (
-        <div class="d-flex justify-content-center align-items-center vh-100 py-5">
-          <div class="spinner-border text-main" role="status">
-            <span class="visually-hidden">
+        <div className="d-flex justify-content-center align-items-center vh-100 py-5">
+          <div className="spinner-border text-main" role="status">
+            <span className="visually-hidden">
               <i className="fas fa-spinner fa-spin position-absolute"></i>
             </span>
           </div>
@@ -45,7 +45,7 @@ export default function CategoriesSlider() {
           <Slider {...settings}>
             {categories.map((category) => {
               return (
-                <div className="CategoriesSlider">
+                <div className="CategoriesSlider" key={category._id}>
                   <Link
                     to={`/DisplayCategory/${category._id}`}
                     className="text-decoration-none"

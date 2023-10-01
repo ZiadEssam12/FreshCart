@@ -1,9 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { userContext } from "../../Context/UserContaxt";
+import toast from "react-hot-toast";
+
 export default function DisplayProducts() {
   let [products, setProducts] = useState([]);
   let [loading, setLoading] = useState(false);
+  let { userToken } = useContext(userContext);
+  let [success, setSuccess] = useState(false);
   useEffect(() => {
     setLoading(true);
     getAllProducts();
@@ -15,21 +20,39 @@ export default function DisplayProducts() {
     setProducts(products.data.data);
     setLoading(false);
   }
+
+  async function addToCart(id) {
+    toast.success("Product added successfully to your cart");
+
+    await axios
+      .post(
+        `https://ecommerce.routemisr.com/api/v1/cart`,
+        { productId: id },
+        {
+          headers: {
+            token: userToken,
+          },
+        }
+      )
+      .then((res) => {
+        setSuccess(true);
+      });
+  }
   return (
     <>
       {loading ? (
-        <div class="d-flex justify-content-center align-items-center py-5">
-          <div class="spinner-border text-main" role="status">
-            <span class="visually-hidden">
+        <div className="d-flex justify-content-center align-items-center py-5">
+          <div className="spinner-border text-main" role="status">
+            <span className="visually-hidden">
               <i className="fas fa-spinner fa-spin position-absolute"></i>
             </span>
           </div>
         </div>
       ) : (
-        <div class="row align-items-center g-3 row-cols-2 row-cols-md-4 row-cols-lg-6 pb-0 pb-md-5">
+        <div className="row align-items-center g-3 row-cols-2 row-cols-md-4 row-cols-lg-6 row-gap-4 pb-0 pb-md-5">
           {products.map((product) => {
             return (
-              <div className="col">
+              <div className="col product overflow-hidden" key={product._id}>
                 <Link
                   className="text-decoration-none  text-black"
                   to={`/DisplayProduct/${product._id}`}
@@ -37,7 +60,7 @@ export default function DisplayProducts() {
                   <img
                     src={product.imageCover}
                     className="w-100"
-                    alt="product.name"
+                    alt={product.title}
                     height={300}
                   />
                   <div className="px-2">
@@ -54,6 +77,14 @@ export default function DisplayProducts() {
                     </p>
                   </div>
                 </Link>
+                <button
+                  className="btn bg-main text-white w-100 my-2"
+                  onClick={() => {
+                    addToCart(product._id);
+                  }}
+                >
+                  Add to card
+                </button>
               </div>
             );
           })}

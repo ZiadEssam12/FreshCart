@@ -24,8 +24,8 @@ export default function Footer() {
             Share App Link
           </button>
         </form>
-        <div class="row row-cols-1 row-cols-lg-2 border border-1 border-start-0 border-end-0 mt-4 justify-content-between align-items-center">
-          <div class="col">
+        <div className="row row-cols-1 row-cols-lg-2 border border-1 border-start-0 border-end-0 mt-4 justify-content-between align-items-center">
+          <div className="col">
             <div className="d-flex align-items-center py-2">
               <p className="">Payment Partners</p>
               <img
@@ -58,7 +58,7 @@ export default function Footer() {
               />
             </div>
           </div>
-          <div class="col">
+          <div className="col">
             <div className="d-flex align-items-center">
               <p className="p-0 m-0">Get deliveries with FreshCart</p>
               <img

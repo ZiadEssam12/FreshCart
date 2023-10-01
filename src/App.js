@@ -17,7 +17,8 @@ import NotFound from "./Components/NotFound/NotFound";
 import DisplayCategory from "./Components/DisplayCategory/DisplayCategory";
 import DisplayProduct from "./Components/DisplayProduct/DisplayProduct";
 import UserContextProvider from "./Context/UserContaxt";
-let routes = createBrowserRouter([
+import WishList from "./Components/WishList/WishList";
+let routes = createHashRouter([
   {
     path: "/",
     element: <Layout />,
@@ -31,6 +32,7 @@ let routes = createBrowserRouter([
       { path: "/Login", element: <Login /> },
       { path: "/Register", element: <Register /> },
       { path: "/DisplayProduct/:id", element: <DisplayProduct /> },
+      { path: "/Wishlist", element: <WishList /> },
       { path: "*", element: <NotFound /> },
     ],
   },
