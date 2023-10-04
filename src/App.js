@@ -20,7 +20,7 @@ import UserContextProvider from "./Context/UserContaxt";
 import WishList from "./Components/WishList/WishList";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 
-let routes = createBrowserRouter([
+let routes = createHashRouter([
   {
     path: "/",
     element: <Layout />,
