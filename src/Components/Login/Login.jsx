@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { userContext } from "../../Context/UserContaxt";
+import { Helmet } from "react-helmet";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -57,6 +58,9 @@ export default function Login() {
 
   return (
     <>
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
       <div className="w-75 m-auto py-5 mt-5">
         <h2>Login Now:</h2>
         {error ? (

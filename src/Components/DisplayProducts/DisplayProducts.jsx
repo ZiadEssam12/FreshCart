@@ -38,6 +38,20 @@ export default function DisplayProducts() {
         setSuccess(true);
       });
   }
+
+  async function addToWishList(id) {
+    toast.success("Product added successfully to your wishlist");
+
+    await axios.post(
+      `https://ecommerce.routemisr.com/api/v1/wishlist`,
+      { productId: id },
+      {
+        headers: {
+          token: userToken,
+        },
+      }
+    );
+  }
   return (
     <>
       {loading ? (
@@ -77,14 +91,28 @@ export default function DisplayProducts() {
                     </p>
                   </div>
                 </Link>
-                <button
-                  className="btn bg-main text-white w-100 my-2"
-                  onClick={() => {
-                    addToCart(product._id);
-                  }}
-                >
-                  Add to card
-                </button>
+                <div className="row justify-content-between align-items-center g-2 my-2">
+                  <div className="col-9 ">
+                    <button
+                      onClick={() => {
+                        addToCart(product._id);
+                      }}
+                      className="btn bg-main text-white w-100"
+                    >
+                      Add to card
+                    </button>
+                  </div>
+                  <div className="col-3 ">
+                    <button
+                      onClick={() => {
+                        addToWishList(product._id);
+                      }}
+                      className="btn bg-dark text-white w-100"
+                    >
+                      <i className="fa-solid fa-heart"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
             );
           })}

@@ -18,21 +18,83 @@ import DisplayCategory from "./Components/DisplayCategory/DisplayCategory";
 import DisplayProduct from "./Components/DisplayProduct/DisplayProduct";
 import UserContextProvider from "./Context/UserContaxt";
 import WishList from "./Components/WishList/WishList";
-let routes = createHashRouter([
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+
+let routes = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      { index: "/", element: <Navigate to={"/Home"} /> },
-      { path: "/Home", element: <Home /> },
-      { path: "/Products", element: <Products /> },
-      { path: "/Cart", element: <Cart /> },
-      { path: "/Categories", element: <Categories /> },
-      { path: "/Brands", element: <Brands /> },
+      {
+        index: "/",
+        element: (
+          <ProtectedRoute>
+            <Navigate to={"/Home"} />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/Home",
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/Products",
+        element: (
+          <ProtectedRoute>
+            <Products />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/Cart",
+        element: (
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/Categories",
+        element: (
+          <ProtectedRoute>
+            <Categories />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/Brands",
+        element: (
+          <ProtectedRoute>
+            <Brands />
+          </ProtectedRoute>
+        ),
+      },
       { path: "/Login", element: <Login /> },
-      { path: "/Register", element: <Register /> },
-      { path: "/DisplayProduct/:id", element: <DisplayProduct /> },
-      { path: "/Wishlist", element: <WishList /> },
+      {
+        path: "/Register",
+        element: <Register />,
+      },
+      {
+        path: "/DisplayProduct/:id",
+        element: (
+          <ProtectedRoute>
+            {" "}
+            <DisplayProduct />{" "}
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/Wishlist",
+        element: (
+          <ProtectedRoute>
+            <WishList />
+          </ProtectedRoute>
+        ),
+      },
       { path: "*", element: <NotFound /> },
     ],
   },

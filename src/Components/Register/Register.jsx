@@ -5,6 +5,7 @@ import * as yup from "yup";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -102,6 +103,9 @@ export default function Register() {
 
   return (
     <>
+      <Helmet>
+        <title>Register</title>
+      </Helmet>
       <div className="w-75 m-auto py-5">
         <h1>Register Now:</h1>
         {error ? (

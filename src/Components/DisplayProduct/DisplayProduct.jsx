@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { userContext } from "../../Context/UserContaxt";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet";
 export default function DisplayProduct() {
   let { id } = useParams();
   let [productInfo, setProduct] = useState({});
@@ -54,6 +55,9 @@ export default function DisplayProduct() {
 
   return (
     <>
+      <Helmet>
+        <title>productInfo?.title</title>
+      </Helmet>
       {loading ? (
         <div className="d-flex justify-content-center align-items-center vh-100 py-5">
           <div className="spinner-border text-main" role="status">
@@ -99,9 +103,9 @@ export default function DisplayProduct() {
                   onClick={() => {
                     addToWishList(id);
                   }}
-                  className="btn text-black w-100"
+                  className="btn text-black w-100  d-flex justify-content-center"
                 >
-                  <i class="fa-solid fa-heart fa-2x"></i>
+                  <i class="fa-solid fa-heart text-center fa-2x"></i>
                 </button>
               </div>
             </div>

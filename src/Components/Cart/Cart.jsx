@@ -1,14 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { userContext } from "../../Context/UserContaxt";
+import { Helmet } from "react-helmet";
+import toast from "react-hot-toast";
 
 export default function Cart() {
   let [cart, setCart] = useState({});
   let [loading, setLoading] = useState(false);
   let { userToken } = useContext(userContext);
-  let [cartCount, setCartCount] = useState(0);
+  let [timeoutReq, setTimeoutReq] = useState(null);
   async function removeItemFromCart(id) {
-    setLoading(true);
+    toast.success("Item Removed From Cart");
+
+    // setLoading(true);
     await axios
       .delete(`https://ecommerce.routemisr.com/api/v1/cart/${id}`, {
         headers: {
@@ -17,10 +21,10 @@ export default function Cart() {
       })
       .then((res) => {
         setCart(res.data.data);
-        setLoading(false);
+        // setLoading(false);
       })
       .catch((err) => {
-        setLoading(false);
+        // setLoading(false);
       });
   }
 
@@ -60,8 +64,47 @@ export default function Cart() {
       });
   }
 
+  async function updateItemCount(id, count, index) {
+    if (count < 1) {
+      toast.success("Item Removed From Cart");
+      removeItemFromCart(id);
+    } else if (count >= 1) {
+      toast.success("Item Count Updated");
+      let newCart = { ...cart };
+      newCart.products[index].count = count;
+      setCart(newCart);
+
+      clearTimeout(timeoutReq);
+      setTimeoutReq(
+        setTimeout(async () => {
+          await axios
+            .put(
+              `https://ecommerce.routemisr.com/api/v1/cart/${id}`,
+              {
+                count,
+              },
+              {
+                headers: {
+                  token: userToken,
+                },
+              }
+            )
+            .then((res) => {
+              setCart(res.data.data);
+            })
+            .catch((err) => {
+              toast.error("Something Went Wrong");
+            });
+        }, 3000)
+      );
+    }
+  }
+
   return (
     <>
+      <Helmet>
+        <title>Cart</title>
+      </Helmet>
       {loading ? (
         <div className="d-flex justify-content-center align-items-center py-5">
           <div className="spinner-border text-main" role="status">
@@ -79,7 +122,7 @@ export default function Cart() {
               {cart.totalCartPrice ? cart?.totalCartPrice : "0"} EGP{" "}
             </p>
             <div className="row justify-content-between align-items-center p-0 m-0 row-gap-3">
-              {cart?.products?.map((item) => {
+              {cart?.products?.map((item, index) => {
                 return (
                   <div className="col-12 p-0 m-0" key={item.product.id}>
                     <div className="row justify-content-between align-items-center p-0 m-0 pb-2 border-bottom border-1">
@@ -106,9 +149,31 @@ export default function Cart() {
                         </button>
                       </div>
                       <div className="col-4 col-md-2 d-flex align-items-center justify-content-end">
-                        <button className="btn btn-outline-danger">-</button>
+                        <button
+                          onClick={() => {
+                            updateItemCount(
+                              item.product.id,
+                              item?.count - 1,
+                              index
+                            );
+                          }}
+                          className="btn btn-outline-danger"
+                        >
+                          -
+                        </button>
                         <span className="px-3">{item?.count}</span>
-                        <button className="btn btn-outline-success">+</button>
+                        <button
+                          onClick={() => {
+                            updateItemCount(
+                              item.product.id,
+                              item?.count + 1,
+                              index
+                            );
+                          }}
+                          className="btn btn-outline-success"
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                   </div>

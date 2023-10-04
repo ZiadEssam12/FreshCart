@@ -98,7 +98,6 @@ export default function Navbar() {
                 <span
                   className="nav-link cursor-pointer"
                   onClick={() => {
-                    console.log("signout");
                     Cookies.remove("userToken");
                     setUserToken(null);
                     navigate("/login");

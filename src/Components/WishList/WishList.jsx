@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../../Context/UserContaxt";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 export default function WishList() {
   let [wishlist, setWishlist] = useState([]);
@@ -21,7 +22,6 @@ export default function WishList() {
         },
       })
       .then((res) => {
-        console.log(res.data.data);
         setWishlist(res.data.data);
         setLoading(false);
       })
@@ -61,6 +61,9 @@ export default function WishList() {
   }
   return (
     <>
+      <Helmet>
+        <title>Wishlist</title>
+      </Helmet>
       {loading ? (
         <div className="d-flex justify-content-center align-items-center py-5">
           <div className="spinner-border text-main" role="status">
