@@ -3,6 +3,7 @@ import { userContext } from "../../Context/UserContaxt";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import toast from "react-hot-toast";
 
 export default function WishList() {
   let [wishlist, setWishlist] = useState([]);
@@ -31,9 +32,10 @@ export default function WishList() {
       });
   }
   async function addToCart(id) {
+    toast.success("Item Added To Cart");
     await axios
       .post(
-        `https://ecommerce.routemisr.com/api/v1/wishlist`,
+        `https://ecommerce.routemisr.com/api/v1/cart`,
         { productId: id },
         {
           headers: {
@@ -44,6 +46,7 @@ export default function WishList() {
       .then(() => {});
   }
   async function removeItemFromWishlist(id) {
+    toast.success("Item Removed From Wishlist");
     setLoading(true);
     await axios
       .delete(`https://ecommerce.routemisr.com/api/v1/wishlist/${id}`, {
@@ -52,8 +55,7 @@ export default function WishList() {
         },
       })
       .then((res) => {
-        setWishlist(res.data.data);
-        setLoading(false);
+        getUserWishlist();
       })
       .catch((err) => {
         setLoading(false);
@@ -74,7 +76,7 @@ export default function WishList() {
         </div>
       ) : (
         <>
-          {wishlist.length === 0 ? (
+          {wishlist?.length === 0 ? (
             <div className="d-flex justify-content-center align-items-center py-5 vh-100 flex-column row-gap-4">
               <h2 className="text-main">Your wishlist is empty</h2>
               <Link to={"/Home"}>
@@ -90,7 +92,7 @@ export default function WishList() {
               <div className="row justify-content-between align-items-center p-0 m-0 row-gap-3 p-2">
                 {wishlist?.map((item) => {
                   return (
-                    <div className="col-12 p-0 m-0" key={item.id}>
+                    <div className="col-12 p-0 m-0" key={item?.id}>
                       <div className="row justify-content-between align-items-center p-0 m-0 pb-2 border-bottom border-1">
                         <div className="col-4 col-md-1 p-0">
                           <div className="product-img">
@@ -102,14 +104,14 @@ export default function WishList() {
                           </div>
                         </div>
                         <div className="col-4 col-md-9">
-                          <p className="fw-bolder">{item.title}</p>
+                          <p className="fw-bolder">{item?.title}</p>
                           <p className="text-main">
                             Price : {item?.price} EGP{" "}
                           </p>
                           <button
                             className="bg-transparent border-0 p-0"
                             onClick={() => {
-                              removeItemFromWishlist(item.id);
+                              removeItemFromWishlist(item?.id);
                             }}
                           >
                             <i className="fa-solid fa-trash-can text-main"></i>{" "}
@@ -119,7 +121,7 @@ export default function WishList() {
                         <div className="col-4 col-md-2 d-flex align-items-center justify-content-end">
                           <button
                             onClick={() => {
-                              addToCart(item.product.id);
+                              addToCart(item?.id);
                             }}
                             className="btn bg-main text-white w-100"
                           >

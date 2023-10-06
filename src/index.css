@@ -29,7 +29,7 @@ a:hover {
 }
 .product:hover {
   box-shadow: var(--shadow);
-  border: solid 1px var(--main-color) ;
+  border: solid 1px var(--main-color);
 }
 .product .btn {
   transition: transform 0.35s, opacity 0.35s;
@@ -79,4 +79,11 @@ a:hover {
 
 .margin-top-58 {
   margin-top: 58px;
+}
+
+.red-icon {
+  color: red !important;
+}
+.icon-font {
+  font-size: 30px;
 }

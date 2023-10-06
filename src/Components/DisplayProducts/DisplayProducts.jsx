@@ -9,10 +9,15 @@ export default function DisplayProducts() {
   let [loading, setLoading] = useState(false);
   let { userToken } = useContext(userContext);
   let [success, setSuccess] = useState(false);
+  let [wishlist, setWishlist] = useState([]);
+  let [wishlistID, setWishlistID] = useState([]);
+
   useEffect(() => {
     setLoading(true);
+    getUserWishlist();
     getAllProducts();
   }, []);
+
   async function getAllProducts() {
     let products = await axios.get(
       "https://ecommerce.routemisr.com/api/v1/products"
@@ -52,6 +57,29 @@ export default function DisplayProducts() {
       }
     );
   }
+  async function getUserWishlist() {
+    let ids = [];
+    await axios
+      .get(`https://ecommerce.routemisr.com/api/v1/wishlist`, {
+        headers: {
+          token: userToken,
+        },
+      })
+      .then((res) => {
+        let ids = [];
+        for (let i = 0; i < res.data.data.length; i++) {
+          ids.push(res.data.data[i].id);
+        }
+        setWishlistID(ids);
+        console.log(ids[0] + " --->wishlist");
+
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  }
+
   return (
     <>
       {loading ? (
@@ -66,7 +94,7 @@ export default function DisplayProducts() {
         <div className="row align-items-center g-3 row-cols-2 row-cols-md-4 row-cols-lg-6 row-gap-4 pb-0 pb-md-5">
           {products.map((product) => {
             return (
-              <div className="col product overflow-hidden" key={product._id}>
+              <div className="col product overflow-hidden" key={product?.id}>
                 <Link
                   className="text-decoration-none  text-black"
                   to={`/DisplayProduct/${product._id}`}
@@ -107,9 +135,13 @@ export default function DisplayProducts() {
                       onClick={() => {
                         addToWishList(product._id);
                       }}
-                      className="btn bg-dark text-white w-100"
+                      className="btn d-flex justify-content-center  w-100 border border-1"
                     >
-                      <i className="fa-solid fa-heart"></i>
+                      {wishlistID.includes(product._id) ? (
+                        <i class="fa-solid fa-heart red-icon icon-font"></i>
+                      ) : (
+                        <i className="fas fa-heart text-black icon-font" />
+                      )}
                     </button>
                   </div>
                 </div>

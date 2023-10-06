@@ -19,8 +19,11 @@ import DisplayProduct from "./Components/DisplayProduct/DisplayProduct";
 import UserContextProvider from "./Context/UserContaxt";
 import WishList from "./Components/WishList/WishList";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+import ResetPassword from "./Components/ResetPassword/ResetPassword";
+import VerifyCode from "./Components/VerifyCode/VerifyCode";
+import ChangePassword from "./Components/ChangePassword/ChangePassword";
 
-let routes = createHashRouter([
+let routes = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
@@ -94,6 +97,18 @@ let routes = createHashRouter([
             <WishList />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/VerifyCode",
+        element: <VerifyCode />,
+      },
+      {
+        path: "/ResetPassword",
+        element: <ResetPassword />,
+      },
+      {
+        path: "/ChangePassword",
+        element: <ChangePassword />,
       },
       { path: "*", element: <NotFound /> },
     ],

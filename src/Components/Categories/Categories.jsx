@@ -34,7 +34,7 @@ export default function Categories() {
         </div>
       ) : (
         <div className="my-5">
-          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 justify-content-center align-items-center gx-4 gy-4">
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 justify-content-center align-items-center gx-4 gy-4">
             {loading ? (
               <div className="d-flex justify-content-center align-items-center py-5">
                 <div className="spinner-border text-main" role="status">

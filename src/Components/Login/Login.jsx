@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import styles from "./Login.module.css";
 import { Formik, useFormik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { userContext } from "../../Context/UserContaxt";
@@ -103,23 +103,31 @@ export default function Login() {
           ) : (
             ""
           )}
-          {loading ? (
-            <button
-              disabled={!(formik.isValid && formik.dirty)}
-              type="button"
-              className="btn bg-main text-white ms-auto d-block mt-2"
+          <div className="d-flex justify-content-between">
+            <Link
+              className="font-sm text-decoration-none text-danger"
+              to={"/ResetPassword"}
             >
-              <i className="fas fa-spinner fa-spin"></i>
-            </button>
-          ) : (
-            <button
-              disabled={!(formik.isValid && formik.dirty)}
-              type="submit"
-              className="btn bg-main text-white ms-auto d-block mt-2"
-            >
-              Login
-            </button>
-          )}
+              forget Your password?
+            </Link>
+            {loading ? (
+              <button
+                disabled={!(formik.isValid && formik.dirty)}
+                type="button"
+                className="btn bg-main text-white mt-2"
+              >
+                <i className="fas fa-spinner fa-spin"></i>
+              </button>
+            ) : (
+              <button
+                disabled={!(formik.isValid && formik.dirty)}
+                type="submit"
+                className="btn bg-main text-white mt-2"
+              >
+                Login
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </>
