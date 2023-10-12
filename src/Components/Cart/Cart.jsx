@@ -3,41 +3,23 @@ import axios from "axios";
 import { userContext } from "../../Context/UserContaxt";
 import { Helmet } from "react-helmet";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { userId } from "../../Context/UserIDContext";
 
 export default function Cart() {
   let [cart, setCart] = useState({});
   let [loading, setLoading] = useState(false);
   let { userToken } = useContext(userContext);
   let [timeoutReq, setTimeoutReq] = useState(null);
+  let [cartOwner, setCartOwner] = useState(null);
   let [error, setError] = useState("");
-  async function removeItemFromCart(id) {
-    toast.success("Item Removed From Cart");
-
-    // setLoading(true);
-    await axios
-      .delete(`https://ecommerce.routemisr.com/api/v1/cart/${id}`, {
-        headers: {
-          token: userToken,
-        },
-      })
-      .then((res) => {
-        setCart(res.data.data);
-        if (res.data.data.products.length === 0) {
-          setError("0 Items in Cart");
-        }
-        // setLoading(false);
-      })
-      .catch((err) => {
-        // setLoading(false);
-      });
-  }
+  let navigate = useNavigate();
+  let { cart: cartItems, setCart: setCartItems } = useContext(userId);
 
   useEffect(() => {
     setLoading(true);
     getUserCart();
   }, []);
-
   async function getUserCart() {
     await axios
       .get(`https://ecommerce.routemisr.com/api/v1/cart`, {
@@ -46,16 +28,44 @@ export default function Cart() {
         },
       })
       .then((res) => {
+        setCartOwner(res.data.data._id);
         setCart(res.data.data);
+        setCartItems(res.data.data.products);
       })
       .catch((err) => {
         setError(err.response.data.message);
       });
     setLoading(false);
   }
-
+  async function removeItemFromCart(id) {
+    toast.success("Item Removed From Cart");
+    setLoading(true);
+    let newCart = [...cartItems];
+    newCart.length = cart.products.length - 1;
+    setCartItems(newCart);
+    await axios
+      .delete(`https://ecommerce.routemisr.com/api/v1/cart/${id}`, {
+        headers: {
+          token: userToken,
+        },
+      })
+      .then((res) => {
+        setCart(res.data.data);
+        setCartItems(res.data.data.products);
+        if (cartItems === 0) {
+          setError("0 Items in Cart");
+          removeCartitems();
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        // console.log(err);
+        setLoading(false);
+      });
+  }
   async function removeCartitems() {
     setError("0 Items in Cart");
+    setCartItems([]);
     setLoading(true);
     await axios
       .delete(`https://ecommerce.routemisr.com/api/v1/cart`, {
@@ -74,11 +84,14 @@ export default function Cart() {
 
   async function updateItemCount(id, count, index) {
     if (count < 1) {
-      toast.success("Item Removed From Cart");
       removeItemFromCart(id);
     } else if (count >= 1) {
       toast.success("Item Count Updated");
       let newCart = { ...cart };
+      let productMainPrice = newCart.products[index].price;
+
+      newCart.totalCartPrice +=
+        productMainPrice * (count - newCart.products[index].count);
       newCart.products[index].count = count;
       setCart(newCart);
 
@@ -108,6 +121,9 @@ export default function Cart() {
     }
   }
 
+  function checkout(totalCartPrice) {
+    navigate("/Checkout", { state: { totalCartPrice, cartOwner } });
+  }
   return (
     <>
       <Helmet>
@@ -123,7 +139,9 @@ export default function Cart() {
         </div>
       ) : (
         <>
-          {error ? (
+          {cart?.products?.length == 0 ||
+          cart?.totalCartPrice == 0 ||
+          cartItems == 0 ? (
             <div className="d-flex justify-content-center align-items-center py-5 vh-100 flex-column row-gap-4">
               <h2 className="text-main">Your Cart is empty</h2>
               <Link to={"/Home"}>
@@ -158,7 +176,7 @@ export default function Cart() {
                           <div className="col-4 col-md-9">
                             <p className="fw-bolder">{item?.product?.title}</p>
                             <p className="text-main">
-                              Price : {item?.price} EGP{" "}
+                              Price : {item?.price * item?.count} EGP{" "}
                             </p>
                             <button
                               className="bg-transparent border-0 p-0"
@@ -202,7 +220,12 @@ export default function Cart() {
                     );
                   })}
                   <div className="p-0">
-                    <button className="btn bg-main text-white w-100">
+                    <button
+                      className="btn bg-main text-white w-100"
+                      onClick={() => {
+                        checkout(cart?.totalCartPrice);
+                      }}
+                    >
                       CheckOut
                     </button>
                   </div>

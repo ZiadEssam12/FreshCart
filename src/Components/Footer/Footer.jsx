@@ -14,13 +14,16 @@ export default function Footer() {
         <p>
           We will send you a link, open it on your phone to downlaod the app.
         </p>
-        <form className="d-flex column-gap-4 ms-0">
+        <form className="d-flex column-gap-1 column-gap-lg-4 ms-0">
           <input
             className="ms-0 ms-lg-4 form-control w-75"
             type="email"
             placeholder="Enter..."
           />
-          <button type="submit" className="btn bg-main text-white">
+          <button
+            type="submit"
+            className="btn bg-main text-white footerSmallFont"
+          >
             Share App Link
           </button>
         </form>

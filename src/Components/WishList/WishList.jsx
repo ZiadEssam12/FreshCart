@@ -4,9 +4,12 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import toast from "react-hot-toast";
+import { wishContext } from "../../Context/WishlistContext";
 
 export default function WishList() {
   let [wishlist, setWishlist] = useState([]);
+  let { wishList, setWishList } = useContext(wishContext);
+
   let { userToken } = useContext(userContext);
   let [loading, setLoading] = useState(false);
   let [error, setError] = useState("");
@@ -55,6 +58,11 @@ export default function WishList() {
         },
       })
       .then((res) => {
+        let ids = [];
+        for (let i = 0; i < res.data.data.length; i++) {
+          ids.push(res.data.data[i].id);
+        }
+        setWishList(ids);
         getUserWishlist();
       })
       .catch((err) => {

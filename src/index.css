@@ -44,7 +44,7 @@ a:hover {
   font-size: 14px;
 }
 .text-main {
-  color: var(--main-color);
+  color: var(--main-color) !important;
 }
 .bg-main {
   background-color: var(--main-color) !important;
@@ -85,5 +85,42 @@ a:hover {
   color: red !important;
 }
 .icon-font {
-  font-size: 30px;
+  font-size: 25px;
+}
+
+.products-page {
+  object-fit: cover !important;
+}
+
+.display-one-line {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .footerSmallFont {
+    font-size: 12px !important;
+  }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  /* styles for sm */
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  /* styles for md */
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  /* styles for lg */
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  /* styles for xl */
 }

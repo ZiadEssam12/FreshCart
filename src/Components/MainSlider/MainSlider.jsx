@@ -18,7 +18,7 @@ export default function MainSlider() {
     autoplaySpeed: 3000,
   };
   return (
-    <div className="main-slider row justify-content-center py-5">
+    <div className="main-slider row justify-content-center py-5  flex-column-reverse flex-md-row">
       <div className="col-12 col-md-9 pe-0 ps-0 ps-md-2" height={500}>
         <Slider {...settings}>
           <div>
@@ -32,7 +32,7 @@ export default function MainSlider() {
           </div>
         </Slider>
       </div>
-      <div className="col-md-3 p-0">
+      <div className="col-12 col-md-3 p-0">
         <img src={img1} className="w-100" height={250} alt="" />
         <img src={img2} className="w-100" height={250} alt="" />
       </div>

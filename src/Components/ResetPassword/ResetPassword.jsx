@@ -2,6 +2,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 export default function ResetPassword() {
@@ -16,6 +17,9 @@ export default function ResetPassword() {
       )
       .then((res) => {
         navigate("/VerifyCode", { state: { email: values.email } });
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
       });
     setLoading(false);
   }

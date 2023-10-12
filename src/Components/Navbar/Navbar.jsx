@@ -3,11 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../Assets/images/freshcart-logo.svg";
 import { userContext } from "../../Context/UserContaxt";
 import Cookies from "js-cookie";
+import { userId } from "../../Context/UserIDContext";
 export default function Navbar() {
   let { userToken, setUserToken } = useContext(userContext);
+  let { cart } = useContext(userId);
   const navigate = useNavigate();
   return (
-    <nav className="navbar navbar-expand-sm navbar-light bg-light fixed-top">
+    <nav className="navbar navbar-expand-md navbar-light bg-light fixed-top">
       <div className="container">
         <Link className="navbar-brand" to={"/"}>
           <img src={logo} alt="fresh cart logo" />
@@ -33,7 +35,8 @@ export default function Navbar() {
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to={"/cart"}>
-                  Cart
+                  <i className="fa-solid fa-cart-shopping fs-5"></i>{" "}
+                  <sup className="fw-bolder fs-5">{cart.length}</sup>
                 </Link>
               </li>
               <li className="nav-item">
@@ -56,11 +59,16 @@ export default function Navbar() {
                   Brands
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to={"/allorders"}>
+                  Orders
+                </Link>
+              </li>
             </ul>
           ) : null}
           <ul className="navbar-nav list-unstyled me-4 ms-auto mt-2 mt-lg-0 d-flex flex-column flex-md-row">
             <li className="nav-item">
-              <ul className="list-unstyled d-flex">
+              <ul className="list-unstyled d-md-none  d-lg-flex ">
                 <li>
                   <a className="nav-link cursor-pointer me-2" to={"/"}>
                     <i className="fa-brands fa-instagram"></i>

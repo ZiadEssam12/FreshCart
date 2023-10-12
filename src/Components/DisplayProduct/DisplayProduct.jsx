@@ -5,12 +5,14 @@ import axios from "axios";
 import { userContext } from "../../Context/UserContaxt";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import { wishContext } from "../../Context/WishlistContext";
 export default function DisplayProduct() {
   let { id } = useParams();
   let [productInfo, setProduct] = useState({});
   let [loading, setLoading] = useState(false);
   let [quantity, setQuantity] = useState(1);
   let { userToken } = useContext(userContext);
+  let { wishList, setWishList } = useContext(wishContext);
 
   useEffect(() => {
     {
@@ -41,7 +43,9 @@ export default function DisplayProduct() {
 
   async function addToWishList(id) {
     toast.success("Product added successfully to your wishlist");
-
+    let newWishlist = [...wishList];
+    newWishlist.push(id);
+    setWishList(newWishlist);
     await axios.post(
       `https://ecommerce.routemisr.com/api/v1/wishlist`,
       { productId: id },
@@ -105,7 +109,11 @@ export default function DisplayProduct() {
                   }}
                   className="btn text-black w-100  d-flex justify-content-center"
                 >
-                  <i class="fa-solid fa-heart text-center fa-2x"></i>
+                  {wishList.includes(id) ? (
+                    <i class="fa-solid fa-heart red-icon icon-font"></i>
+                  ) : (
+                    <i className="fas fa-heart text-black icon-font" />
+                  )}
                 </button>
               </div>
             </div>

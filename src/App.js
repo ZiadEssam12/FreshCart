@@ -22,6 +22,10 @@ import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import ResetPassword from "./Components/ResetPassword/ResetPassword";
 import VerifyCode from "./Components/VerifyCode/VerifyCode";
 import ChangePassword from "./Components/ChangePassword/ChangePassword";
+import WishListContextProvider from "./Context/WishlistContext";
+import Checkout from "./Components/Checkout/Checkout";
+import AllOrders from "./Components/allOrders/AllOrders";
+import UserIdContextProvider from "./Context/UserIDContext";
 
 let routes = createBrowserRouter([
   {
@@ -99,6 +103,22 @@ let routes = createBrowserRouter([
         ),
       },
       {
+        path: "/Checkout",
+        element: (
+          <ProtectedRoute>
+            <Checkout />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/allorders",
+        element: (
+          <ProtectedRoute>
+            <AllOrders />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "/VerifyCode",
         element: <VerifyCode />,
       },
@@ -117,9 +137,13 @@ let routes = createBrowserRouter([
 
 function App() {
   return (
-    <UserContextProvider>
-      <RouterProvider router={routes}></RouterProvider>;
-    </UserContextProvider>
+    <UserIdContextProvider>
+      <UserContextProvider>
+        <WishListContextProvider>
+          <RouterProvider router={routes}></RouterProvider>;
+        </WishListContextProvider>
+      </UserContextProvider>
+    </UserIdContextProvider>
   );
 }
 
